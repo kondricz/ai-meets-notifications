@@ -1,25 +1,25 @@
 import axios from 'axios';
-import { DiscordConfiguration, DiscordMessageExample } from "../types";
-import { mapDiscordStructureType, getDiscordPrompt } from "../utils";
+import { SlackConfiguration, SlackMessageExample } from "../types";
+import { mapSlackStructureType, getSlackPrompt } from "../utils";
 
 import { getPromptRequest } from './openAi';
 
-export const sendDiscordMessage = async (
+export const sendSlackMessage = async (
   openAiSecret: string,
   message: string,
-  configuration: DiscordConfiguration
+  configuration: SlackConfiguration
 ) => {
   if (!configuration.webhookUrl) {
-    throw Error("Webhook URL is required to send discord notifications");
+    throw Error("Webhook URL is required to send slack notifications");
   }
   if (!message) {
-    throw Error("Message is required to send discord notifications");
+    throw Error("Message is required to send slack notifications");
   }
 
-  const prompt = getDiscordPrompt(message, {
+  const prompt = getSlackPrompt(message, {
     ...configuration,
-    mappedStructure: mapDiscordStructureType(
-      configuration.example || DiscordMessageExample.SIMPLE,
+    mappedStructure: mapSlackStructureType(
+      configuration.example || SlackMessageExample.SIMPLE,
       configuration.customExample
     ),
   });

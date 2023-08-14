@@ -5,7 +5,7 @@ import {
 } from "../types";
 import { discordSimple, discordList, discordComplex } from "../examples";
 
-export const mapStructureType = (
+export const mapDiscordStructureType = (
   type: DiscordMessageExample,
   custom?: string
 ) => {

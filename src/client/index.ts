@@ -1,5 +1,5 @@
-import {sendDiscordMessage} from "../services";
-import { DiscordConfiguration } from "../types/discord";
+import {sendDiscordMessage, sendSlackMessage} from "../services";
+import { DiscordConfiguration, SlackConfiguration } from "../types";
 
 /**
  * Interface for initializing the NotificationsClient.
@@ -45,11 +45,19 @@ export class NotificationsClient {
   }
 
   /**
-   * Placeholder method to send a message to Slack (not implemented yet).
+   * Method to send a message to Slack.
    *
    * @param message - The content of the message to be sent.
+   * @param configuration - An object containing configuration options for the Slack message.
+   *                        (e.g., target channel, formatting, etc.)
+   * @returns A Promise indicating whether the message was sent successfully or not.
    */
-  // public sendSlackMessage(message: string) {}
+  public sendSlackMessage(
+    message: string,
+    configuration: SlackConfiguration
+    ) {
+      return sendSlackMessage(this.openAiSecret, message, configuration)
+    }
 
   /**
    * Placeholder method to send a message to Telegram (not implemented yet).
