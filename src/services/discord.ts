@@ -1,8 +1,13 @@
-import axios from 'axios';
-import { DiscordConfiguration, DiscordMessageExample } from "../types";
+import axios from "axios";
+import {
+  DiscordConfiguration,
+  DiscordMessageExample,
+  validationError,
+  serverError,
+} from "../types";
 import { mapDiscordStructureType, getDiscordPrompt } from "../utils";
 
-import { getPromptRequest } from './openAi';
+import { getPromptRequest } from "./openAi";
 
 export const sendDiscordMessage = async (
   openAiSecret: string,
@@ -10,10 +15,12 @@ export const sendDiscordMessage = async (
   configuration: DiscordConfiguration
 ) => {
   if (!configuration.webhookUrl) {
-    throw Error("Webhook URL is required to send discord notifications");
+    return validationError(
+      "Webhook URL is required to send discord notifications"
+    );
   }
   if (!message) {
-    throw Error("Message is required to send discord notifications");
+    return validationError("Message is required to send discord notifications");
   }
 
   const prompt = getDiscordPrompt(message, {
@@ -23,22 +30,22 @@ export const sendDiscordMessage = async (
       configuration.customExample
     ),
   });
-
   try {
     const { data } = await getPromptRequest(openAiSecret, prompt);
     const result = data.choices[0].message.content;
 
     if (result) {
       await axios({
-        method: 'POST',
+        method: "POST",
         url: configuration.webhookUrl,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         data: result,
       });
     }
+    return result;
   } catch (err) {
-    console.log(err, "FN ERRORED");
+    return serverError();
   }
 };

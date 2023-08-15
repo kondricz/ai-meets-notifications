@@ -26,6 +26,9 @@ export class NotificationsClient {
    * @param init - Initialization parameters for the NotificationsClient.
    */
   constructor(init: InitParameters) {
+    if (!init.openAiSecret) {
+      throw new Error("You must provide an OpenAI secret key.");
+    }
     this.openAiSecret = init.openAiSecret;
   }
 

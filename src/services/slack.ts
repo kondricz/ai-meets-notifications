@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SlackConfiguration, SlackMessageExample } from "../types";
+import { SlackConfiguration, SlackMessageExample, validationError, serverError } from "../types";
 import { mapSlackStructureType, getSlackPrompt } from "../utils";
 
 import { getPromptRequest } from './openAi';
@@ -10,10 +10,12 @@ export const sendSlackMessage = async (
   configuration: SlackConfiguration
 ) => {
   if (!configuration.webhookUrl) {
-    throw Error("Webhook URL is required to send slack notifications");
+    return validationError(
+      "Webhook URL is required to send slack notifications"
+    );
   }
   if (!message) {
-    throw Error("Message is required to send slack notifications");
+    return validationError("Message is required to send slack notifications");
   }
 
   const prompt = getSlackPrompt(message, {
@@ -38,7 +40,8 @@ export const sendSlackMessage = async (
         data: result,
       });
     }
+    return result;
   } catch (err) {
-    console.log(err, "FN ERRORED");
+    return serverError();
   }
 };
