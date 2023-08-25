@@ -1,11 +1,11 @@
 import axios from "axios";
 import {
-  DiscordConfiguration,
+  SlackConfiguration,
   BaseMessageResponse,
 } from "../types";
-import { sendDiscordMessage } from "./discord";
+import { sendSlackMessage } from './slack';
 
-const OPEN_AI_RESPONSE = "Okay cool, I'll send this to the discord";
+const OPEN_AI_RESPONSE = "Okay cool, I'll send this to the slack";
 
 jest.mock("axios");
 jest.mock("./openAi", () => ({
@@ -22,16 +22,16 @@ jest.mock("./openAi", () => ({
   })),
 }));
 
-describe("sendDiscordMessage", () => {
+describe("sendSlackMessage", () => {
   it("Should throw an error if message is missing", async () => {
-    const missingMessage = await sendDiscordMessage("open_secret", "", {
+    const missingMessage = await sendSlackMessage("open_secret", "", {
       webhookUrl: "test-webhook-url",
-    } as DiscordConfiguration);
+    } as SlackConfiguration);
 
-    const missingWebhook = await sendDiscordMessage(
+    const missingWebhook = await sendSlackMessage(
       "open_secret",
       "this message",
-      {} as DiscordConfiguration
+      {} as SlackConfiguration
     );
 
     expect(
@@ -43,12 +43,12 @@ describe("sendDiscordMessage", () => {
   });
   it("Should generate the correct prompt based on the configuration", async () => {
     axios.post = jest.fn().mockResolvedValue({});
-    const response = await sendDiscordMessage(
+    const response = await sendSlackMessage(
       "open_secret",
       "Unit tests are cool, but integration tests are cooler",
       {
         webhookUrl: "test-webhook-url",
-      } as DiscordConfiguration
+      } as SlackConfiguration
     );
 
     expect('result' in response).toBeTruthy();
@@ -56,12 +56,12 @@ describe("sendDiscordMessage", () => {
   });
   it("Should return information about the prompt and other metadata of the request", async () => {
     axios.post = jest.fn().mockResolvedValue({});
-    const response = await sendDiscordMessage(
+    const response = await sendSlackMessage(
       "open_secret",
       "Unit tests are cool, but integration tests are cooler",
       {
         webhookUrl: "test-webhook-url",
-      } as DiscordConfiguration
+      } as SlackConfiguration
     );
 
     expect('usage' in response).toBeTruthy();

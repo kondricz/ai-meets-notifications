@@ -28,18 +28,16 @@ export const getDiscordPrompt = (
   {
     minLength,
     maxLength,
-    emotions,
+    emotions = [],
     language,
     mappedStructure,
-  }: DiscordConfiguration & { mappedStructure: string }
+  }: Omit<DiscordConfiguration, "webhookUrl" | "example"> & { mappedStructure: string }
 ) => {
   return `
     You are about to write a message to discord. Rewrite the following message: ${message}. If You see any links (http:// or https://), make sure to keep them intact!.
     The message should be between ${minLength || 100} and ${
     maxLength || 300
-  } characters long. Tone your message using the following emotions: ${Object.values(
-    emotions
-  ).join(",")}.
+  } characters long. Tone your message using the following emotions: ${emotions.join(",")}.
     It should be in ${
       language || Language.en
     } language. As You are generating a message to discord webhook, you must use the following structure:

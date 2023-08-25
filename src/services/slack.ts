@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SlackConfiguration, SlackMessageExample, validationError, serverError } from "../types";
+import { SlackConfiguration, SlackMessageExample, validationError, serverError, BaseMessageResponse, BaseMessageError } from "../types";
 import { mapSlackStructureType, getSlackPrompt } from "../utils";
 
 import { getPromptRequest } from './openAi';
@@ -8,7 +8,7 @@ export const sendSlackMessage = async (
   openAiSecret: string,
   message: string,
   configuration: SlackConfiguration
-) => {
+): Promise<BaseMessageError | BaseMessageResponse> => {
   if (!configuration.webhookUrl) {
     return validationError(
       "Webhook URL is required to send slack notifications"
@@ -40,7 +40,10 @@ export const sendSlackMessage = async (
         data: result,
       });
     }
-    return result;
+    return {
+      result,
+      usage: data.usage
+    };
   } catch (err) {
     return serverError();
   }

@@ -4,6 +4,8 @@ import {
   DiscordMessageExample,
   validationError,
   serverError,
+  BaseMessageResponse,
+  BaseMessageError,
 } from "../types";
 import { mapDiscordStructureType, getDiscordPrompt } from "../utils";
 
@@ -13,7 +15,7 @@ export const sendDiscordMessage = async (
   openAiSecret: string,
   message: string,
   configuration: DiscordConfiguration
-) => {
+): Promise<BaseMessageError | BaseMessageResponse> => {
   if (!configuration.webhookUrl) {
     return validationError(
       "Webhook URL is required to send discord notifications"
@@ -44,7 +46,10 @@ export const sendDiscordMessage = async (
         data: result,
       });
     }
-    return result;
+    return {
+      result,
+      usage: data.usage
+    };
   } catch (err) {
     return serverError();
   }

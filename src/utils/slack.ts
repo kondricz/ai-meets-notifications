@@ -26,18 +26,16 @@ export const getSlackPrompt = (
   {
     minLength,
     maxLength,
-    emotions,
+    emotions = [],
     language,
     mappedStructure,
-  }: SlackConfiguration & { mappedStructure: string }
+  }: Omit<SlackConfiguration, "webhookUrl" | "example"> & { mappedStructure: string }
 ) => {
   return `
     You are about to write a message to your internal slack channel. Rewrite the following message: ${message}. If You see any links (http:// or https://), make sure to keep them intact!.
     The message should be between ${minLength || 100} and ${
     maxLength || 300
-  } characters long. Tone your message using the following emotions: ${Object.values(
-    emotions
-  ).join(",")}.
+  } characters long. Tone your message using the following emotions: ${emotions.join(",")}.
     It should be in ${
       language || Language.en
     } language. As You are generating a message to slack webhook, you must use the following structure:

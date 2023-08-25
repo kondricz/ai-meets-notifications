@@ -233,3 +233,20 @@ export interface OpenAIChatResponse {
       }
     ];
   }
+
+/**
+ * General error message format
+ */
+export interface BaseMessageError {
+  error: boolean;
+  reason: string;
+  message: string | undefined;
+}
+
+/**
+ * General success message format
+ */
+export interface BaseMessageResponse {
+  result: string;
+  usage: OpenAIChatResponse["usage"];
+}
