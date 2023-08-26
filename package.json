@@ -1,6 +1,6 @@
 {
   "name": "@kondricz/ai-meets-notifications",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Wrapper combining openAI and http requests to post AI generated messages to popular communication channels.",
   "main": "./dist/index.js",
   "scripts": {
@@ -10,7 +10,15 @@
     "type": "git",
     "url": "git+https://github.com/kondricz/ai-meets-notifications.git"
   },
-  "keywords": ["openai", "slack", "discord", "notification", "chatgpt", "text", "messages"],
+  "keywords": [
+    "openai",
+    "slack",
+    "discord",
+    "notification",
+    "chatgpt",
+    "text",
+    "messages"
+  ],
   "author": "kondricz",
   "license": "MIT",
   "bugs": {
