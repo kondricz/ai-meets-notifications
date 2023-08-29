@@ -18,29 +18,40 @@
 ## Install
 
 ```sh
-yarn install
+npm install @kondricz/ai-meets-notifications --save
 ```
 
-The package is fully typed. An easy example of sending a discord message:
+The package is fully typed. An easy example of sending same message to both discord and slack channels
 
 ```
 import {
   NotificationsClient,
   DiscordMessageExample,
+  SlackMessageExample,
   Emotion,
   Language,
 } from "@kondricz/ai-meets-notifications";
 
-const client = new NotificationsClient({ openAiSecret: "your open ai secret" });
+const notifications = new NotificationsClient({ openAiSecret: "your open ai secret" });
 
-client.sendDiscordMessage("Hello, world!", {
-  maxLength: 400,
-  minLength: 150,
-  language: Language.pl,
-  emotions: [Emotion.ACCEPTANCE, Emotion.SAFETY, Emotion.JOY],
-  webhookUrl: "Your discord webhook url",
-  example: DiscordMessageExample.SIMPLE,
-});
+await Promise.all([
+  notifications.sendDiscordMessage('Hello, world!', {
+    maxLength: 400,
+    minLength: 150,
+    language: Language.pl,
+    emotions: [Emotion.ACCEPTANCE, Emotion.SAFETY, Emotion.JOY],
+    webhookUrl: 'Your discord webhook url',
+    example: DiscordMessageExample.SIMPLE,
+  }),
+  notifications.sendSlackMessage('Hello world', {
+    maxLength: 400,
+    minLength: 150,
+    language: Language.pl,
+    emotions: [Emotion.ACCEPTANCE, Emotion.SAFETY, Emotion.JOY],
+    webhookUrl: 'Your discord webhook url',
+    example: SlackMessageExample.LIST,
+  }),
+]);
 ```
 
 ## Author
