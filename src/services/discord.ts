@@ -25,12 +25,19 @@ export const sendDiscordMessage = async (
     return validationError("Message is required to send discord notifications");
   }
 
+  const getMappedStructure = () => {
+    if ("example" in configuration) {
+      return mapDiscordStructureType(configuration.example);
+    }
+    return mapDiscordStructureType(
+      DiscordMessageExample.SIMPLE,
+      configuration.customExample
+    );
+  };
+
   const prompt = getDiscordPrompt(message, {
     ...configuration,
-    mappedStructure: mapDiscordStructureType(
-      configuration.example || DiscordMessageExample.SIMPLE,
-      configuration.customExample
-    ),
+    mappedStructure: getMappedStructure(),
   });
   try {
     const { data } = await getPromptRequest(openAiSecret, prompt);
@@ -48,7 +55,7 @@ export const sendDiscordMessage = async (
     }
     return {
       result,
-      usage: data.usage
+      usage: data.usage,
     };
   } catch (err) {
     return serverError();

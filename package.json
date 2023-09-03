@@ -1,6 +1,6 @@
 {
   "name": "@kondricz/ai-meets-notifications",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Wrapper combining openAI and http requests to post AI generated messages to popular communication channels.",
   "main": "./dist/index.js",
   "scripts": {

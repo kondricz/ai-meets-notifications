@@ -1,8 +1,15 @@
-import axios from 'axios';
-import { SlackConfiguration, SlackMessageExample, validationError, serverError, BaseMessageResponse, BaseMessageError } from "../types";
+import axios from "axios";
+import {
+  SlackConfiguration,
+  SlackMessageExample,
+  validationError,
+  serverError,
+  BaseMessageResponse,
+  BaseMessageError,
+} from "../types";
 import { mapSlackStructureType, getSlackPrompt } from "../utils";
 
-import { getPromptRequest } from './openAi';
+import { getPromptRequest } from "./openAi";
 
 export const sendSlackMessage = async (
   openAiSecret: string,
@@ -18,12 +25,19 @@ export const sendSlackMessage = async (
     return validationError("Message is required to send slack notifications");
   }
 
+  const getMappedStructure = () => {
+    if ("example" in configuration) {
+      return mapSlackStructureType(configuration.example);
+    }
+    return mapSlackStructureType(
+      SlackMessageExample.SIMPLE,
+      configuration.customExample
+    );
+  };
+
   const prompt = getSlackPrompt(message, {
     ...configuration,
-    mappedStructure: mapSlackStructureType(
-      configuration.example || SlackMessageExample.SIMPLE,
-      configuration.customExample
-    ),
+    mappedStructure: getMappedStructure(),
   });
 
   try {
@@ -32,17 +46,17 @@ export const sendSlackMessage = async (
 
     if (result) {
       await axios({
-        method: 'POST',
+        method: "POST",
         url: configuration.webhookUrl,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         data: result,
       });
     }
     return {
       result,
-      usage: data.usage
+      usage: data.usage,
     };
   } catch (err) {
     return serverError();

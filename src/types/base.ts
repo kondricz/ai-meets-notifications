@@ -203,6 +203,7 @@ export interface BaseMessageConfiguration {
     minLength: number;
     language: Language;
     emotions: Emotion[];
+    webhookUrl: string;
 }
 
 export const DEFAULT_MODEL = `gpt-3.5-turbo`
